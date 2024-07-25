@@ -63,7 +63,7 @@ const App = () => {
               config: {
                 encoding: 'WEBM_OPUS',
                 sampleRateHertz: 48000,
-                languageCode: 'en-US',
+                languageCode: 'id-ID',
               },
               audio: {
                 content: base64Audio,
