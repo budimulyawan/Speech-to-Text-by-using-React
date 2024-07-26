@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 // Function to convert audio blob to base64 encoded string
 const audioBlobToBase64 = (blob) => {
@@ -24,12 +24,31 @@ const App = () => {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [transcription, setTranscription] = useState("");
-  const [counter, setCounter] = useState({
+  const [counter, dispatch] = useReducer(reducer, {
     fanta: 0,
     bengbeng: 0,
     aqua: 0,
     tehbotol: 0,
   });
+
+  function reducer(state, action) {
+    if (action.type === 'update') {
+      return {
+        fanta: state.fanta + action.total.fanta,
+        bengbeng: state.bengbeng + action.total.bengbeng,
+        aqua: state.aqua + action.total.aqua,
+        tehbotol: state.tehbotol + action.total.tehbotol,
+      }
+    } else if (action.type === 'reset') {
+      return {
+        fanta: 0,
+        bengbeng: 0,
+        aqua: 0,
+        tehbotol: 0,
+      }
+    }
+    throw Error('Unknown action.');
+  }
 
   // Cleanup function to stop recording and release media resources
   useEffect(() => {
@@ -39,32 +58,6 @@ const App = () => {
       }
     };
   }, [mediaRecorder]);
-
-  // function countPhrase(sentence, phrase) {
-  //   console.log(sentence is function);
-  //   // Convert both the sentence and phrase to lower case for case-insensitive matching
-  //   const lowerCaseSentence = sentence.toLowerCase();
-  //   const lowerCasePhrase = phrase.toLowerCase();
-
-  //   // Split the sentence by the phrase and count the number of splits
-  //   const parts = lowerCaseSentence.split(lowerCasePhrase);
-
-  //   // The number of occurrences is one less than the number of splits
-  //   return parts.length - 1;
-  // }
-
-  // function countPhrase(sentence, word) {
-  //   // Convert the sentence to lowercase and split it into an array of words
-  //   let wordsArray = sentence.toLowerCase().split(/\W+/);
-
-  //   // Convert the word to lowercase
-  //   let targetWord = word.toLowerCase();
-
-  //   // Use the filter method to find matches and return the count
-  //   let wordCount = wordsArray.filter((w) => w === targetWord).length;
-
-  //   return wordCount;
-  // }
 
   function countPhrase(sentence, phrase) {
     console.log(sentence);
@@ -89,17 +82,21 @@ const App = () => {
 
   useEffect(() => {
     if (transcription !== "") {
+      
       const totalFanta = countPhrase(transcription, "fanta");
       let totalBengbeng = countPhrase(transcription, "beng beng");
       totalBengbeng += countPhrase(transcription, "beng-beng");
       const totalAqua = countPhrase(transcription, "aqua");
       let totalTehBotol = countPhrase(transcription, "teh botol");
       totalTehBotol += countPhrase(transcription, "tehbotol");
-      setCounter({
-        fanta: totalFanta,
-        bengbeng:  totalBengbeng,
-        tehbotol: totalTehBotol,
-        aqua: totalAqua,
+      dispatch({
+        type: "update",
+        total: {
+          fanta: totalFanta,
+          bengbeng:  totalBengbeng,
+          tehbotol: totalTehBotol,
+          aqua: totalAqua,
+        }
       });
     }
   }, [
@@ -182,9 +179,8 @@ const App = () => {
       setRecording(false);
     }
   };
-
   const resetCounter = () => {
-    setCounter({ fanta: 0, bengbeng: 0, aqua: 0, tehkotak: 0 });
+    dispatch({type: "reset"});
   };
 
   const mode4 = (
