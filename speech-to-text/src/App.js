@@ -41,6 +41,36 @@ const App = () => {
     "ABC Sambal",
     "Bango Kecap Botol",
     "Samyang Chicken",
+    "Samyang Carbo",
+    "Sweety Silver",
+    "Merries",
+    "Fitti",
+    "Mamy Poko",
+    "Pantene Shampoo",
+    "Garnier Men",
+    "Biore Body Wash",
+    "Casablanca Men",
+    "Cap Lang Kayu Putih",
+    "Certainty",
+    "Lifree",
+    "You C1000 Water"
+    ,"Top Capuccinno",
+    "Frisian Flag SKM",
+    "Adem Sari Sparkling",
+    "Walls Magnum Mango",
+    "Pantene Conditioner",
+    "Close UP",
+    "Ponds Facial",
+    "Garnier Micelar",
+    "Beng beng",
+    "Roma Cream Kelapa",
+    "Gery Snack Sereal",
+    "Garuda Rosta",
+    "Walls Magnum Choco"
+
+
+
+
   ];
   let jsonObject = {};
 
