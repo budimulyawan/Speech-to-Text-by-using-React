@@ -24,7 +24,7 @@ const App = () => {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [transcription, setTranscription] = useState("");
-  const brands = [
+  const brands = capitalizeFirstLetterArray([
     "Bebelac Madu",
     "VIT",
     "Sweety Bronze",
@@ -77,7 +77,7 @@ const App = () => {
 "SAYANG POWDER","SOKLIN LIQUID","RINSO LIQUID",
 "PEPSODENT","REGAZZA","SAYANG LIQUID","GLOW & LOVELY",
 "CHIL KID", "NUTRILON", "MORIGRO","Bebelac Gold"
-  ];
+  ]);
   let jsonObject = {};
 
   brands.forEach((item, index) => {
@@ -215,7 +215,16 @@ const App = () => {
       console.error("Error getting user media:", error);
     }
   };
-
+  function capitalizeFirstLetterArray(stringArray) {
+    return stringArray.map(item => {
+        // Split the element into words, capitalize the first letter of each, and rejoin
+        return item
+            .trim()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+    });
+}
   const stopRecording = () => {
     if (mediaRecorder) {
       mediaRecorder.stop();
