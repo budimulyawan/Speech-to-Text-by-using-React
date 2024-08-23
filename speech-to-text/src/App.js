@@ -247,7 +247,9 @@ const App = () => {
         style={{
           fontSize: "12px",
           color: "#212121",
-          maxWidth: "80%",
+          width: "100px",
+          margin: "5px",
+        
           lineHeight: "1.5",
           textAlign: "left",
           background: "white",
