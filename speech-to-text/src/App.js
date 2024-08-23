@@ -53,8 +53,8 @@ const App = () => {
     "Cap Lang Kayu Putih",
     "Certainty",
     "Lifree",
-    "You C1000 Water"
-    ,"Top Capuccinno",
+    "You C1000 Water",
+    "Top Capuccinno",
     "Frisian Flag SKM",
     "Adem Sari Sparkling",
     "Walls Magnum Mango",
@@ -66,11 +66,17 @@ const App = () => {
     "Roma Cream Kelapa",
     "Gery Snack Sereal",
     "Garuda Rosta",
-    "Walls Magnum Choco"
-
-
-
-
+    "Garuda Pilus",
+    "Walls Magnum Choco",
+    "Top Coffee Gula Aren",
+    "CUSSONS BABY WIPES",
+    "TELON LANG PLUS",
+    "BEBELAC VANILLA",
+    "CUSSONS BABY TELON",
+    "SOKLIN PEWANGI",
+"SAYANG POWDER","SOKLIN LIQUID","RINSO LIQUID",
+"PEPSODENT","REGAZZA","SAYANG LIQUID","GLOW & LOVELY",
+"CHIL KID", "NUTRILON", "MORIGRO","Bebelac Gold"
   ];
   let jsonObject = {};
 
@@ -137,7 +143,7 @@ const App = () => {
       brands.forEach((item, index) => {
         brandCount[item] = counter[item] + countPhrase(transcription, item);
       });
-      setCounter(brandCount)
+      setCounter(brandCount);
       console.log(brandCount);
     }
   }, [transcription]);
@@ -226,21 +232,24 @@ const App = () => {
     setCounter(jsonObject);
   };
 
-  const counterModel =  (brand) => { return <div
-  style={{
-    fontSize: "12px",
-    color: "#212121",
-    maxWidth: "80%",
-    lineHeight: "1.5",
-    textAlign: "left",
-    background: "white",
-    padding: "20px",
-    borderRadius: "5px",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-  }}
->
-  {brand}: {counter[brand]}
-</div>
+  const counterModel = (brand) => {
+    return (
+      <div
+        style={{
+          fontSize: "12px",
+          color: "#212121",
+          maxWidth: "80%",
+          lineHeight: "1.5",
+          textAlign: "left",
+          background: "white",
+          padding: "20px",
+          borderRadius: "5px",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+        }}
+      >
+        {brand}: {counter[brand]}
+      </div>
+    );
   };
   const mode4 = (
     <div
@@ -322,7 +331,7 @@ const App = () => {
           boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
         }}
       >
-        Keyword:  {brands.join(", ")}
+        Keyword: {brands.join(", ")}
       </p>
       <p
         style={{
@@ -350,7 +359,7 @@ const App = () => {
           fontFamily: "Roboto, sans-serif",
         }}
       >
-       {brands.map(b => counterModel(b))}
+        {brands.map((b) => counterModel(b))}
       </div>
     </div>
   );
