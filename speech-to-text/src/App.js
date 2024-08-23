@@ -263,9 +263,9 @@ const App = () => {
         fontFamily: "Roboto, sans-serif",
       }}
     >
-      <h1 style={{ fontSize: "48px", color: "#3F51B5", marginBottom: "40px" }}>
-        Alfamart Promo
-      </h1>
+      <img src="https://alfamart.co.id/frontend/img/brand/logo_alfamart_transparent.png" alt="Logo Alfamart transparent"></img>
+      
+
       {!recording ? (
         <button
           onClick={startRecording}
