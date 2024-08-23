@@ -24,31 +24,50 @@ const App = () => {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [transcription, setTranscription] = useState("");
-  const [counter, dispatch] = useReducer(reducer, {
-    fanta: 0,
-    bengbeng: 0,
-    aqua: 0,
-    tehbotol: 0,
+  const brands = [
+    "Bebelac Madu",
+    "VIT",
+    "Sweety Bronze",
+    "Frisian Flag UHT",
+    "Bango Kecap",
+    "Pouch",
+    "Aqua",
+    "Rinso",
+    "ABC Kecap",
+    "Amunizer",
+    "You C1000 Vitamin",
+    "Adem Sari Lemon",
+    "Adem Sari Box",
+    "ABC Sambal",
+    "Bango Kecap Botol",
+    "Samyang Chicken",
+  ];
+  let jsonObject = {};
+
+  brands.forEach((item, index) => {
+    jsonObject[item] = 0;
   });
 
-  function reducer(state, action) {
-    if (action.type === 'update') {
-      return {
-        fanta: state.fanta + action.total.fanta,
-        bengbeng: state.bengbeng + action.total.bengbeng,
-        aqua: state.aqua + action.total.aqua,
-        tehbotol: state.tehbotol + action.total.tehbotol,
-      }
-    } else if (action.type === 'reset') {
-      return {
-        fanta: 0,
-        bengbeng: 0,
-        aqua: 0,
-        tehbotol: 0,
-      }
-    }
-    throw Error('Unknown action.');
-  }
+  const [counter, setCounter] = useState(jsonObject);
+
+  // function reducer(state, action) {
+  //   if (action.type === "update") {
+  //     console.log(state);
+  //     jsonObject = {};
+  //     brands.forEach((item, index) => {
+  //       jsonObject[item] = state[item] += action.total[item]
+  //     });
+  //     console.log(jsonObject);
+  //     return jsonObject;
+  //   } else if (action.type === "reset") {
+  //     jsonObject = {};
+  //     brands.forEach((item, index) => {
+  //       jsonObject[item] = 0;
+  //     });
+  //     return jsonObject;
+  //   }
+  //   throw Error("Unknown action.");
+  // }
 
   // Cleanup function to stop recording and release media resources
   useEffect(() => {
@@ -72,7 +91,9 @@ const App = () => {
     let position = 0;
 
     // Loop through the sentence and count occurrences of the phrase
-    while ((position = lowerCaseSentence.indexOf(lowerCasePhrase, position)) !== -1) {
+    while (
+      (position = lowerCaseSentence.indexOf(lowerCasePhrase, position)) !== -1
+    ) {
       count++;
       position += lowerCasePhrase.length; // Move the position forward to avoid counting the same occurrence again
     }
@@ -82,26 +103,14 @@ const App = () => {
 
   useEffect(() => {
     if (transcription !== "") {
-      
-      const totalFanta = countPhrase(transcription, "fanta");
-      let totalBengbeng = countPhrase(transcription, "beng beng");
-      totalBengbeng += countPhrase(transcription, "beng-beng");
-      const totalAqua = countPhrase(transcription, "aqua");
-      let totalTehBotol = countPhrase(transcription, "teh botol");
-      totalTehBotol += countPhrase(transcription, "tehbotol");
-      dispatch({
-        type: "update",
-        total: {
-          fanta: totalFanta,
-          bengbeng:  totalBengbeng,
-          tehbotol: totalTehBotol,
-          aqua: totalAqua,
-        }
+      let brandCount = {};
+      brands.forEach((item, index) => {
+        brandCount[item] = counter[item] + countPhrase(transcription, item);
       });
+      setCounter(brandCount)
+      console.log(brandCount);
     }
-  }, [
-    transcription
-  ]);
+  }, [transcription]);
 
   if (!process.env.REACT_APP_GOOGLE_API_KEY) {
     throw new Error("REACT_APP_GOOGLE_API_KEY not found in the environment");
@@ -121,7 +130,6 @@ const App = () => {
         const audioBlob = event.data;
 
         const base64Audio = await audioBlobToBase64(audioBlob);
-        //console.log('Base64 audio:', base64Audio);
 
         try {
           const startTime = performance.now();
@@ -180,9 +188,30 @@ const App = () => {
     }
   };
   const resetCounter = () => {
-    dispatch({type: "reset"});
+    let jsonObject = {};
+
+    brands.forEach((item, index) => {
+      jsonObject[item] = 0;
+    });
+    setCounter(jsonObject);
   };
 
+  const counterModel =  (brand) => { return <div
+  style={{
+    fontSize: "12px",
+    color: "#212121",
+    maxWidth: "80%",
+    lineHeight: "1.5",
+    textAlign: "left",
+    background: "white",
+    padding: "20px",
+    borderRadius: "5px",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+  }}
+>
+  {brand}: {counter[brand]}
+</div>
+  };
   const mode4 = (
     <div
       style={{
@@ -263,7 +292,7 @@ const App = () => {
           boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
         }}
       >
-        Keyword: "Fanta, Teh botol, Aqua, Beng Beng"
+        Keyword:  {brands.join(", ")}
       </p>
       <p
         style={{
@@ -282,6 +311,8 @@ const App = () => {
       </p>
       <div
         style={{
+          maxWidth: "80%",
+          flexWrap: "wrap",
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
@@ -289,66 +320,7 @@ const App = () => {
           fontFamily: "Roboto, sans-serif",
         }}
       >
-        <p
-          style={{
-            fontSize: "24px",
-            color: "#212121",
-            maxWidth: "80%",
-            lineHeight: "1.5",
-            textAlign: "left",
-            background: "white",
-            padding: "20px",
-            borderRadius: "5px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-          }}
-        >
-          Fanta: {counter.fanta}
-        </p>
-        <p
-          style={{
-            fontSize: "24px",
-            color: "#212121",
-            maxWidth: "80%",
-            lineHeight: "1.5",
-            textAlign: "left",
-            background: "white",
-            padding: "20px",
-            borderRadius: "5px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-          }}
-        >
-          Aqua: {counter.aqua}
-        </p>
-        <p
-          style={{
-            fontSize: "24px",
-            color: "#212121",
-            maxWidth: "80%",
-            lineHeight: "1.5",
-            textAlign: "left",
-            background: "white",
-            padding: "20px",
-            borderRadius: "5px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-          }}
-        >
-          Bengbeng: {counter.bengbeng}
-        </p>
-        <p
-          style={{
-            fontSize: "24px",
-            color: "#212121",
-            maxWidth: "80%",
-            lineHeight: "1.5",
-            textAlign: "left",
-            background: "white",
-            padding: "20px",
-            borderRadius: "5px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-          }}
-        >
-          Teh botol: {counter.tehbotol}
-        </p>
+       {brands.map(b => counterModel(b))}
       </div>
     </div>
   );
